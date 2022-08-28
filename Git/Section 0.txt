@@ -1,0 +1,67 @@
+1. creating a directory using mkdir command and move into that directory
+$ mkdir project_dir
+$ cd project_dir/
+
+2. Initialize git version database
+$ git init
+
+3. Create new file index.html
+$ touch index.html
+
+4. Check git status for untracked and tracked files we use git status
+$ git status
+
+5. Stage index.html file - we add to stage area 
+$ git add index.html
+
+6. Commit index.html and give a comment using -m
+$ git commit -m "first commit of index.html"
+
+7. Make changes in index.html file and crate a text file info.txt
+$ vi index.html
+$ touch info.txt
+
+8. Check git status
+$ git status
+
+9. Configure git to ignore all text file
+// in .git/info/exclude we add *.txt to ignore all text files
+$ vi .git/info/exclude
+
+10. Check git status
+$ git status
+
+11. Stage and commit index.html
+$ git add index.html
+$ git commit -m "second commit of index.html"
+
+12. Log all the comments
+//--oneline is used for one line detail about comment
+$ git log --oneline
+
+13. changes made into index.html
+$ vi index.html
+
+14. Revert the changes made in 13
+$ git restore index.html
+
+15.changes made into index.html
+$ vi index.html
+
+16. Stage index.html
+$ git add index.html
+
+17. Revert back the stage made in 16
+$ git restore --staged index.html
+
+18. Renaming add command to my-add
+$ alias my-add="git add"
+// for global alias we can use -" git config --global alias.my-add add "
+
+19. Using my-add staging index.html and commiting
+$ my-add index.html
+$ git commit -m "final commit of index.html"
+
+20. Reverting the last commit
+git reset HEAD~1
+//here hard can be used to delete it completely

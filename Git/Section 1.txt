@@ -1,0 +1,59 @@
+21. Creating Assignments directory and cd to it
+$ mkdir Assignments
+$ cd Assignments
+
+22. Initialize git version database
+$ git init
+
+23. Creating a text file and writing few lines in it
+$ touch README.txt
+$ vi README.txt //changes made
+
+24. Commiting README file
+$ git add README.txt 
+$ git commit -m "commit for readme file"
+
+25. Creating a branch
+$ git branch html-assignments
+
+26. Switching to html-assignments branch
+$ git checkout html-assignments
+
+27.copy files into assignments folder
+//Done Manually
+
+28. Commiting HTML files into html-assignments branch
+$ git add .
+$ git commit -m "html assignments commit in branch"
+
+29. changes made into files - done using editor
+
+30. Commiting changes
+$ git add .
+$ git commit -m "html-assignments is updated" 
+
+31. Switching to master branch
+$ git checkout master
+
+32. make changes into README.txt and commit those changes
+$ vi README.txt
+$ git add .
+$ git commit -m "readme is updated in master"
+
+33. Switch to html-assignments branch
+$ git checkout html-assignments
+
+34. changes made into files - done using editor
+
+35. COmmit those changes
+$ git add .
+$ git commit -m "html-assignment final update"
+
+36. Switch to master
+$ git checkout master
+
+37. Merge html-assignments branch to master
+$ git merge html-assignments
+
+38. Deleting html-assignments
+$ git branch -d html-assignments
