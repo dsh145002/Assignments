@@ -16,9 +16,9 @@ where UnitPrice in ( (select * from cte_max), (select * from cte_min))
 
 --5. Display the list of products that are out of stock
 
---6,7 missing data for supplier and stock
-
 select * from Product where isDiscontinued = 1
+
+--6,7 missing data for supplier and stock
 
 --8. Display complete list of customers, the OrderID and date of any orders they have made
 select c.*, o.Id, OrderDate from Customer c
@@ -34,7 +34,7 @@ from [Order]
 group by CustomerId 
 order by Count(*) desc )
 
---10. Display the customerid whose name has substring ‘RA’
+--10. Display the customerid whose name has substring â€˜RAâ€™
 
 select Id from Customer
 where FirstName like '%ra%'
