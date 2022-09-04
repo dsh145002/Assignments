@@ -38,8 +38,8 @@ $ git commit -m "js-assignment final update"
 12. Switch to master
 $ git checkout master
 
-13. Merge css-assignments branch to master
+13. Merge js-assignments branch to master
 $ git merge js-assignments
 
-14. Deleting css-assignments
+14. Deleting js-assignments
 $ git branch -d js-assignments
