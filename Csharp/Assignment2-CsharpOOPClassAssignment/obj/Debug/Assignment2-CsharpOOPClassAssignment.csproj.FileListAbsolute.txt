@@ -1,0 +1,8 @@
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\bin\Debug\Assignment2-CsharpOOPClassAssignment.exe.config
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\bin\Debug\Assignment2-CsharpOOPClassAssignment.exe
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\bin\Debug\Assignment2-CsharpOOPClassAssignment.pdb
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\obj\Debug\Assignment2-CsharpOOPClassAssignment.csproj.AssemblyReference.cache
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\obj\Debug\Assignment2-CsharpOOPClassAssignment.csproj.SuggestedBindingRedirects.cache
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\obj\Debug\Assignment2-CsharpOOPClassAssignment.csproj.CoreCompileInputs.cache
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\obj\Debug\Assignment2-CsharpOOPClassAssignment.exe
+C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Csharp\Assignment2-CsharpOOPClassAssignment\obj\Debug\Assignment2-CsharpOOPClassAssignment.pdb
