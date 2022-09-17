@@ -1,0 +1,141 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assignment6_3
+{
+    public delegate void Delegate1(object source, CustomEventArgs ce);
+    public delegate void Delegate2(object source, CustomEventArgs ce);
+    public class CustomEventArgs : EventArgs
+    {
+        public CustomEventArgs(string message)
+        {
+            Message = message;
+        }
+
+        public string Message { get; set; }
+    }
+    class Account
+    {
+        public event Delegate1 UnderBalance;
+        public event Delegate2 BalanceZero;
+        public long AccountNumber { get; set; }
+        public string CustomerName { get; set; }
+        public double Balance { get; set; }
+
+        public Account() { }
+        public Account(long AN, string CN,double bal) { 
+            this.AccountNumber = AN;
+            this.CustomerName = CN;
+            this.Balance = bal;
+        }
+        public virtual void Withdraw(double amt)
+        {
+            if(Balance == 0 || Balance < 1)
+            {
+                OnBalanceZero(new CustomEventArgs("Your Account Balance is zero"));
+            }
+            else if (amt > Balance)
+            {
+                OnUnderBalance(new CustomEventArgs("Your Account Balance is less than amount you are debiting"));
+            }
+            else this.Balance -= amt;
+        }
+        public void Deposit(double amt)
+        {
+            this.Balance += amt;
+        }
+        protected virtual void OnUnderBalance(CustomEventArgs ce)
+        {
+            if (UnderBalance != null) UnderBalance(this, ce);
+        }
+        protected virtual void OnBalanceZero(CustomEventArgs ce)
+        {
+            if(BalanceZero!=null) BalanceZero(this, ce);
+        }
+    }
+    class ICICIBank : Account
+    {
+     
+        public ICICIBank() : base() { }
+        public ICICIBank(long AN, string CN, double bal) : base(AN, CN, bal) { }
+
+        public override void Withdraw(double amt)
+        {
+            if (Balance == 0 || Balance < 1)
+            {
+                OnBalanceZero(new CustomEventArgs("Transaction cannot be continued as balance is insufficient/zero in Account"));
+            }
+            else if (amt > Balance)
+            {
+                OnUnderBalance(new CustomEventArgs("Transaction cannot be continued as balance is insufficient/zero in Account"));
+            }
+            else this.Balance -= amt;
+        }
+        protected override void OnBalanceZero(CustomEventArgs ce)
+        {
+            
+            base.OnBalanceZero(ce);
+        }
+        protected override void OnUnderBalance(CustomEventArgs ce)
+        {
+            
+            base.OnUnderBalance(ce);
+        }
+    }
+    class HDFC : Account
+    {
+        public HDFC() : base() { }
+        public HDFC(long AN, string CN, double bal) : base(AN, CN, bal) { }
+
+        public override void Withdraw(double amt)
+        {
+            if (Balance-amt<1000.00 || amt>Balance)
+            {
+                OnUnderBalance(new CustomEventArgs("Transaction cannot be continued below specified limit of\tRs.-1000"));
+            }
+            
+            else this.Balance -= amt;
+        }
+        protected override void OnUnderBalance(CustomEventArgs ce)
+        {
+
+            base.OnUnderBalance(ce);
+        }
+    }
+    internal class Program
+    {
+        public static void MessageService(object source, CustomEventArgs ea)
+        {
+            Console.WriteLine(ea.Message);
+        }
+        //public static void MessageServiceForUnderBal(object source, CustomEventArgs ea)
+        //{
+        //    Console.WriteLine(ea.Message);
+        //}
+        static void Main(string[] args)
+        {
+            Account acc = new Account(11001100,"Akshat",300000.00);
+            acc.UnderBalance += MessageService;
+            acc.BalanceZero += MessageService;
+
+            ICICIBank icb = new ICICIBank(111202,"Bhavesh",2000.00);
+            icb.UnderBalance += MessageService;
+            icb.BalanceZero += MessageService;
+
+            acc.Withdraw(200000.00);
+            acc.Withdraw(400000.00);
+
+            icb.Withdraw(1500.00);
+            icb.Deposit(500.00);
+            icb.Withdraw(1500.00);
+
+            HDFC hdfc = new HDFC(1235000,"Abhishek",1600.00);
+            hdfc.UnderBalance += MessageService;
+            hdfc.Withdraw(600);
+            hdfc.Withdraw(200.00);
+        }
+    }
+}

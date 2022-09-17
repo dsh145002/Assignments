@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assignment5_1
+{
+    internal class Program
+    {
+        public static void PrintDetails<T>(T[] arr)
+        {
+            foreach (T i in arr)
+            {
+                Console.WriteLine(i);
+            }
+        }
+        public static void Main(string[] Args)
+        {
+            int n ;
+            Console.WriteLine("Enter size of Array");
+            n = Convert.ToInt32(Console.ReadLine());
+            int[] arr = new int[n];
+            int[] arr2 = new int[n];
+
+            string[] StrArray = new string[n];
+            string[] StrArray2 = new string[n];
+            Console.WriteLine("Enter Elements of Integer Array");
+            for (int i = 0; i < n; i++)
+            {
+                arr[i] = int.Parse(Console.ReadLine());
+            }
+            Console.WriteLine("Enter Elements of String Array");
+            for (int i = 0; i < n; i++)
+            {
+                StrArray[i] = Console.ReadLine();
+            }
+
+            Array.Copy(arr, arr2, arr.Length); //Copy arr into arr2
+            Console.WriteLine("Copied Array1 into Array2");
+            Array.Sort(arr2); //Sorting array 2
+            Array.Reverse(arr);     //Reversing array
+            //int a, b;
+            //a = int.Parse(Console.ReadLine()); 
+            //b = int.Parse(Console.ReadLine()); 
+            Array.Clear(arr2, 1,1 );  //Clearing specific elements
+
+            
+            Array.Copy(StrArray, StrArray2, StrArray.Length);
+            Console.WriteLine("Copied StrngArray1 into StringArray2");
+            Array.Sort(StrArray2);
+            Array.Reverse(StrArray);
+            Array.Clear(StrArray2, 0, 2);
+
+            Console.WriteLine("Enter Elements of Integer Array1 after reversing");
+            PrintDetails(arr);
+            Console.WriteLine("Enter Elements of Integer Array2 after sorting and clearing 2nd element");
+            PrintDetails(arr2);
+            Console.WriteLine("Enter Elements of String after reversing Array1");
+            PrintDetails(StrArray);
+            Console.WriteLine("Enter Elements of String Array2 after sorting and clearing first 2 elements");
+            PrintDetails(StrArray2);
+        }
+    }
+}

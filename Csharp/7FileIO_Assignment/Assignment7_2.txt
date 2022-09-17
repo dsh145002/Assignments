@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assignment7_2
+{
+    class Account
+    {
+        public long AccountNumber { get; set; }
+        public string CustomerName { get; set; }
+        public int CustomerId { get; set; }
+        public Account() { }
+        public Account(long AccNo, string CustName,int CustId) {
+            this.AccountNumber = AccNo;
+            this.CustomerName = CustName;
+            this.CustomerId = CustId;
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Account> ListAcc = new List<Account>();
+            //For populating Account List
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    ListAcc.Add(new Account((12000+i*12),$"Customer {i}",101+i));
+            //}
+            string s="yes";
+            while (s.ToLower()=="yes")
+            {
+                Console.WriteLine("Enter Employee Details");
+                Console.WriteLine("Enter Employee Name");
+                string name = Console.ReadLine();
+                Console.WriteLine("Enter Employee Account Number");
+                long accNo = Convert.ToInt64(Console.ReadLine());
+                Console.WriteLine("Enter Employee Id");
+                int Id = Convert.ToInt32(Console.ReadLine());
+                Account acc = new Account(accNo,name,Id);
+                ListAcc.Add(acc);
+                Console.WriteLine("Write yes to continue anything to quit");
+                s = Console.ReadLine();
+
+            }
+            string path = @"C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Customer Info.txt";
+
+            
+            using(FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                using(StreamWriter sw = new StreamWriter(fs))
+                {
+                    foreach(Account a in ListAcc)
+                    {
+                        sw.WriteLine($"{a.CustomerName},{a.CustomerId},{a.AccountNumber}");
+                        
+                    }
+                }
+                Console.WriteLine("Customer Data Entered Successfully into File\n");
+            }
+
+            using(FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                Console.WriteLine("Gathering Customer Data from File");
+                using(StreamReader st = new StreamReader(fs))
+                {
+                    Console.WriteLine(st.ReadToEnd());
+                }
+            }
+        }
+    }
+}

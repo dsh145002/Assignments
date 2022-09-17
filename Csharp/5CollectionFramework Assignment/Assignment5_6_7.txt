@@ -1,0 +1,99 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Assignment5_6_7
+{
+    class Player
+    {
+        public string Name { get; set; }
+        public int RunsScored { set; get; }
+        public Player() { }
+        public Player(string name, int rs)
+        {
+            this.Name = name;
+            this.RunsScored = rs;
+        }
+    }
+    class Team : IEnumerable
+    {
+        
+        public List<Player> arr = new List<Player>();
+        public Team() { }
+        public Team(List<Player> A) {
+            this.arr = A;
+        }
+        public int count { 
+            get { return this.arr.Count; }
+        }
+        public Player this[int index]
+        {
+            get
+            {
+                return this.arr[index];
+            }
+        }
+        //Question 7
+        public IEnumerable<Player> GetPlayer()
+        {
+            foreach (Player p in arr)
+            {
+                yield return p;
+            }
+        }
+        //Question 6
+        public IEnumerator GetEnumerator()
+        {
+            return new PlayerEnumerator(this);
+        }
+    }
+    class PlayerEnumerator : IEnumerator
+    {
+        Player CurrentPlayer;
+        Team t;
+        int CurrIdx;
+        public PlayerEnumerator(Team team)
+        {
+            this.t = team;
+            CurrIdx = -1;
+        }
+        public object Current => CurrentPlayer;
+
+        public bool MoveNext()
+        {
+            if (++CurrIdx >= t.count) return false;
+            else CurrentPlayer = t[CurrIdx];
+                return true;
+        }
+
+        public void Reset()
+        {
+           
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            List<Player> p = new List<Player>();
+            p.Add(new Player("Virat",10000));
+            p.Add(new Player("Rohit", 7000));
+            p.Add(new Player("Sachin", 20000));
+            p.Add(new Player("Dhoni", 5000));
+            Team India = new Team(p);
+            Console.WriteLine("Displaying Players using IEnumerable");
+            Console.WriteLine("Players are\nName\tRuns");
+            foreach (Player t in India)
+            {
+                Console.WriteLine(t.Name + "\t" + t.RunsScored);
+            }
+            Console.WriteLine("Displaying Players using iterator");
+            Console.WriteLine("Players are\nName\tRuns");
+            foreach (Player t in India.GetPlayer())
+            {
+                Console.WriteLine(t.Name + "\t" + t.RunsScored);
+            }
+        }
+    }
+}

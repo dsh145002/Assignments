@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assignment7_1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string path = @"C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack";
+            
+            int choice;
+            do
+            {
+                Console.WriteLine("1 to View all files in dir\n2 to View all dir and sub-dir\n3 Read All text files in path\n4 To create a file and write to it\nPress any other to exit");
+                choice = int.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("Files are: ");
+                       
+                        string[] files = Directory.GetFiles(path);
+                        foreach (string file in files)
+                        {
+                            FileInfo f = new FileInfo(file);
+
+                            Console.WriteLine("{0} created at {1} extension {2}", f.Name, f.CreationTime, f.Extension);
+                            
+                        }
+                        
+                        break;
+                    case 2:
+                        Console.WriteLine("Directories and sub-directories are: ");
+                        string[] dirs = Directory.GetDirectories(path,"*",SearchOption.AllDirectories);
+                        foreach (string s in dirs)
+                        {
+                            var n = new DirectoryInfo(s);
+                            Console.WriteLine(n.Name);
+                            
+                        }
+                        break;
+                    case 3:
+                        string[] TxtFiles = Directory.GetFiles(path, "*.txt");
+                        int i = 0;
+                        foreach (string s in TxtFiles)
+                        {
+                            Console.WriteLine("File {0}",i);
+                            Console.WriteLine(File.ReadAllText(s));
+                            i++;
+                        }
+                        break;
+                    case 4:
+                        string fileName = "Example1.txt";
+                        File.Create(Path.Combine(path, fileName));
+                        Console.WriteLine("File Created");
+                       
+                        break;
+                    default:
+                        Console.WriteLine("Enter valid option");
+                        break;
+                }
+            } while (choice>0&&choice<5);
+        }
+    }
+}

@@ -1,0 +1,125 @@
+using System;
+using System.Diagnostics;
+using System.Runtime.Remoting.Services;
+
+namespace Assignment3_2
+{
+    interface ICloneable
+    {
+        MyStack clone();
+    }
+    class StackException : Exception
+    {
+        public StackException() : base() { }
+        public StackException(string msg) : base(msg)
+        {
+
+        }
+    }
+
+    public class MyStack: ICloneable
+    {
+        public int n { get; set; }
+        public int[] arr { get; set; }
+        public int top { get; set; }
+        
+
+        public MyStack() { }
+        public MyStack(int size)
+        {
+            this.n = size;
+            this.top = -1;
+            arr = new int[size];
+        }
+
+        public void push(int num)
+        {
+            if (top >= n - 1)
+            {
+                throw new StackException("STACK OVERFLOW");
+            }
+            else
+            {
+                top++;
+                arr[top] = num;
+            }
+        }
+        public int pop()
+        {
+            if (top == -1)
+            {
+                throw new StackException("STACK UNDERFLOW/EMPTY");
+
+            }
+            else
+            {
+                return this.arr[top--];
+            }
+        }
+        public MyStack clone()
+        {
+            MyStack m2 = new MyStack(this.n);
+            for (int i = 0; i < this.n; i++)
+            {
+                m2.push(this.arr[i]);
+            }
+            return m2;
+        }
+    }
+    class Test
+    {
+        static void Main()
+        {
+            
+            int choice;
+            int size;
+            Console.WriteLine("Enter the size of Stack: ");
+            size = Convert.ToInt32(Console.ReadLine());
+            MyStack ms1 = new MyStack(3);
+            ms1.push(3);ms1.push(4);ms1.push(5);
+            MyStack st = new MyStack(size);
+            do
+            {
+                Console.WriteLine("Enter 1 to Push\n2 to Pop\n3 to Print Stack\n4 Clone Stack\nPress any other key to Exit");
+                choice = Convert.ToInt32(Console.ReadLine());
+                switch (choice)
+                {
+                    case 1:
+                        try
+                        {
+                            Console.WriteLine("Enter Number to be pushed");
+                            int num = Convert.ToInt32(Console.ReadLine());
+                            st.push(num);
+                        }
+                        catch (StackException e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+                        break;
+                    case 2:
+                        try { Console.WriteLine("Number popped: {0}", st.pop()); }
+                        catch (StackException e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+                        break;
+                    case 3:
+                        Console.WriteLine("Stack Elements are: ");
+                        for (int i = 0; i <= st.top; i++)
+                        {
+                            Console.WriteLine(st.arr[i]);
+                        }break;
+                    case 4:
+                        Console.WriteLine("Clone Stack");
+                        MyStack ms = new MyStack();
+                        ms = ms1.clone();
+                        break;
+                    default:
+                        break;
+                }
+                
+            } while (choice > 0 && choice < 4); 
+            
+        }
+    }
+}

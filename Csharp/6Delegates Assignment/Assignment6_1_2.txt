@@ -1,0 +1,223 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Security.Cryptography;
+
+namespace Assignment6
+{
+    interface IPrintable
+    {
+        void PrintDetails(List<Employee> emp);
+    }
+    public delegate void EmployeeDelegate(List<Employee> emp);
+    public class Employee : IPrintable
+    {
+        public int EmpNo { get; set; }
+        public string EmpName { get; set; }
+        public double Salary { get; set; }
+
+        double HRA, TA, DA, PF, TDS;
+
+        public double NetSalary;
+        public double GrossSalary { set; get; }
+        public Employee() { }
+        public Employee(int ENo, string EName, double Sal)
+        {
+            this.EmpName = EName;
+            this.EmpNo = ENo;
+            this.Salary = Sal;
+            CalculateSalary();
+        }
+
+        public virtual void CalculateSalary()
+        {
+            if (Salary < 5000)
+            {
+                this.HRA = 0.10 * Salary;
+                this.TA = 0.05 * Salary;
+                this.DA = 0.15 * Salary;
+            }
+            else if (Salary < 10000)
+            {
+                this.HRA = 0.15 * Salary;
+                this.TA = 0.10 * Salary;
+                this.DA = 0.20 * Salary;
+            }
+            else if (Salary < 15000)
+            {
+                this.HRA = 0.20 * Salary;
+                this.TA = 0.15 * Salary;
+                this.DA = 0.25 * Salary;
+            }
+            else if (Salary < 20000)
+            {
+                this.HRA = 0.25 * Salary;
+                this.TA = 0.20 * Salary;
+                this.DA = 0.30 * Salary;
+            }
+            else
+            {
+                this.HRA = 0.30 * Salary;
+                this.TA = 0.25 * Salary;
+                this.DA = 0.35 * Salary;
+            }
+            this.GrossSalary = this.Salary + HRA + TA + DA;
+            this.PF = 0.10 * this.GrossSalary;
+            this.TDS = 0.18 * this.GrossSalary;
+            this.NetSalary = this.GrossSalary - (PF + TDS);
+
+        }
+        public virtual void PrintDetails(List<Employee> emp)
+        {
+            foreach (Employee e in emp)
+            {
+                if (e.GetType().ToString() == "Assignment6.Employee")
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", e.EmpNo, e.EmpName, e.Salary, e.GrossSalary, e.NetSalary);
+                }
+            }
+        }
+    }
+    public class Manager : Employee, IPrintable
+    {
+        double PA, OA, FA;
+        public Manager() { }
+        public Manager(int ENo, string EName, double Sal) : base(ENo, EName, Sal)
+        {
+            this.PA = 0.08 * Sal;
+            this.FA = 0.13 * Sal;
+            this.OA = 0.03 * Sal;
+            CalculateSalary();
+        }
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            base.GrossSalary += OA + FA + PA;
+            base.NetSalary += (OA + FA + PA);
+
+        }
+        public override void PrintDetails(List<Employee> emp)
+        {
+            foreach(Employee e in emp)
+            {
+                if (e.GetType().ToString() == "Assignment6.Manager")
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}",e.EmpNo, e.EmpName, e.Salary, e.GrossSalary,e.NetSalary);
+                }
+            }
+            
+        }
+    }
+    public class MarketingExecutive : Employee, IPrintable
+    {
+        public double Kilometer { get; set; }
+        public double TourAllowances { get; set; }
+        public double TelephoneAllowance = 1000.00;
+
+        public MarketingExecutive() : base() { }
+        public MarketingExecutive(int ENo, string EName, double Sal, double km) : base(ENo, EName, Sal)
+        {
+            this.Kilometer = km;
+            this.TourAllowances = 5 * this.Kilometer;
+            CalculateSalary(); 
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            base.GrossSalary += TourAllowances + TelephoneAllowance;
+            base.NetSalary -= (TourAllowances + TelephoneAllowance);
+        }
+        public override void PrintDetails(List<Employee> emp)
+        {
+            foreach (Employee e in emp)
+            {
+                if (e.GetType().ToString() == "Assignment6.MarketingExecutive")
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", e.EmpNo, e.EmpName, e.Salary, e.GrossSalary, e.NetSalary);
+                }
+            }
+        }
+    }
+    internal class EmpManagement
+    {
+        public static void Main()
+        {
+
+            List<Employee> emp = new List<Employee>();
+            emp.Add(new Employee(101,"Akshat",35000));
+            emp.Add(new Manager(102, "Bhavesh", 30200));
+            emp.Add(new MarketingExecutive(103, "Chirag", 43400,1));
+            emp.Add(new Manager(104, "Naman", 4000));
+
+            Manager man = new Manager();
+            EmployeeDelegate ed = new EmployeeDelegate(man.PrintDetails);
+            MarketingExecutive mrkExec = new MarketingExecutive();
+            ed += mrkExec.PrintDetails;
+            
+            int choice, num;
+            double Sal, km;
+            string st, name;
+            do
+            {
+                Console.WriteLine("Enter 1 For Basic Employee\n2 for Manager\n3 for Marketing Executive\n4 for Printing Details\nPress other key to exit");
+                choice = Convert.ToInt32(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("Enter Employee Number: ");
+                        num = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Name of Employee : ");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Enter Salary of Employee : ");
+                        Sal = Convert.ToDouble(Console.ReadLine());
+                        Employee e = new Employee(num, name, Sal);
+                        emp.Add(e);
+                        
+                        break;
+                    case 2:
+                        Console.WriteLine("Enter Employee Number: ");
+                        num = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Name of Employee : ");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Enter Salary of Employee : ");
+                        Sal = Convert.ToDouble(Console.ReadLine());
+                        Manager m = new Manager(num, name, Sal);
+                        emp.Add(m);
+                       
+                        break;
+                    case 3:
+                        Console.WriteLine("Enter Employee Number: ");
+                        num = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Name of Employee : ");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Enter Salary of Employee : ");
+                        Sal = Convert.ToDouble(Console.ReadLine());
+
+                        Console.WriteLine("Enter Kilometers Travelled: ");
+                        km = Convert.ToDouble(Console.ReadLine());
+                        MarketingExecutive mk = new MarketingExecutive(num, name, Sal, km);
+                        emp.Add(mk);
+                       
+                        break;
+                    case 4:
+                        ed(emp);
+                        
+                        break;
+                    default:
+                        Console.WriteLine("--Enter Valid Choice--");
+                        break;
+                }
+                Console.WriteLine("Do you want to continue Y/N");
+                st = (Console.ReadLine()).ToUpper();
+            } while (st == "Y");
+
+
+
+
+
+        }
+    }
+
+}

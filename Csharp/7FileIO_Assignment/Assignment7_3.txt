@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+namespace Assignment7_3
+{
+    [Serializable]
+    class Employee
+    {
+        public int ID;
+        public String Name;
+        public double Salary;
+        public Employee() { }
+        public Employee(int id,string name,  double Sal) { this.Name = name; this.ID = id; this.Salary = Sal; }
+
+    }
+    [Serializable]
+
+    class Manager : Employee
+    {
+        public Manager() : base() { }
+        public Manager(int id,string name,  double Sal) : base(id,name,  Sal)
+        { }
+    }
+    [Serializable]
+
+    class MarketingExecutive : Employee
+    {
+        public double Kilometer { get; set; }
+        public MarketingExecutive() : base() { }
+        public MarketingExecutive(int id,string name,  double Sal, double km) : base( id,name, Sal)
+        {
+            this.Kilometer = km;
+        }
+    }
+    class Example
+    {
+        static void Main(string[] args)
+        {
+            Employee e = new Employee( 1,"David", 2000);
+            Manager man = new Manager( 2,"Tim", 2000);
+            MarketingExecutive me = new MarketingExecutive(3,"Smith",3000,4);
+            List<Employee> ListEmp = new List<Employee>();
+            ListEmp.Add(e); ListEmp.Add(man);ListEmp.Add(me);
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream stream = new FileStream(@"C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Employee S-D.txt", FileMode.Create, FileAccess.Write))
+            {
+                
+                foreach (Employee emp in ListEmp)
+                {
+                    formatter.Serialize(stream, emp);
+                    Console.WriteLine("Employee Data Serialized Successfully\n");
+                }
+                
+            }
+            
+             using (FileStream stream = new FileStream(@"C:\Users\Devendra Sharma\Downloads\Dot Net Full Stack\Employee S-D.txt", FileMode.Open, FileAccess.Read))
+             {
+                Employee obj = (Employee)formatter.Deserialize(stream);
+                Console.WriteLine("Employee Data De-Serialized Successfully");
+                Console.WriteLine(obj.ID + " " + obj.Name + " " + obj.Salary);
+
+                Employee obj2 = (Employee)formatter.Deserialize(stream);
+                Console.WriteLine("Employee Data De-Serialized Successfully");
+                Console.WriteLine(obj2.ID + " " + obj2.Name + " " + obj2.Salary);
+
+                Employee obj3 = (Employee)formatter.Deserialize(stream);
+                Console.WriteLine("Employee Data De-Serialized Successfully");
+                Console.WriteLine(obj3.ID + " " + obj3.Name + " " + obj3.Salary);
+
+            }
+           
+
+        }
+    }
+}

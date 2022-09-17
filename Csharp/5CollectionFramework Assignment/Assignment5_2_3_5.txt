@@ -1,0 +1,221 @@
+using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq.Expressions;
+
+//Assigment 5.2,5.3,5.5
+namespace Assignment5_2
+{
+    interface IPrintable
+    {
+        void PrintDetails();
+    }
+    public class Employee : IPrintable
+    {
+        public int EmpNo { get; set; }
+        public string EmpName { get; set; }
+        public double Salary { get; set; }
+
+        double HRA, TA, DA, PF, TDS;
+
+        public double NetSalary;
+        public double GrossSalary { set; get; }
+        public Employee() { }
+        public Employee(int ENo, string EName, double Sal)
+        {
+            this.EmpName = EName;
+            this.EmpNo = ENo;
+            this.Salary = Sal;
+
+        }
+
+        public virtual void CalculateSalary()
+        {
+            if (Salary < 5000)
+            {
+                HRA = 0.10 * Salary;
+                TA = 0.05 * Salary;
+                DA = 0.15 * Salary;
+            }
+            else if (Salary < 10000)
+            {
+                HRA = 0.15 * Salary;
+                TA = 0.10 * Salary;
+                DA = 0.20 * Salary;
+            }
+            else if (Salary < 15000)
+            {
+                HRA = 0.20 * Salary;
+                TA = 0.15 * Salary;
+                DA = 0.25 * Salary;
+            }
+            else if (Salary < 20000)
+            {
+                HRA = 0.25 * Salary;
+                TA = 0.20 * Salary;
+                DA = 0.30 * Salary;
+            }
+            else
+            {
+                HRA = 0.30 * Salary;
+                TA = 0.25 * Salary;
+                DA = 0.35 * Salary;
+            }
+            this.GrossSalary = this.Salary + HRA + TA + DA;
+            PF = 0.10 * this.GrossSalary;
+            TDS = 0.18 * this.GrossSalary;
+            NetSalary = this.GrossSalary - (PF + TDS);
+
+        }
+        public virtual void PrintDetails()
+        {
+            Console.WriteLine("\nEmpployee No. {0}\tEmployee Name {1}\tEmployee Salary {2}\tGross Salary {3}\tNet Salary {4}", this.EmpNo, this.EmpName, this.Salary, GrossSalary, this.NetSalary);
+        }
+    }
+    public class Manager : Employee, IPrintable
+    {
+        double PA, OA, FA;
+        public Manager() { }
+        public Manager(int ENo, string EName, double Sal) : base(ENo, EName, Sal)
+        {
+            PA = 0.08 * Sal;
+            FA = 0.13 * Sal;
+            OA = 0.03 * Sal;
+
+        }
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            base.GrossSalary += OA + FA + PA;
+            base.NetSalary += (OA + FA + PA);
+
+        }
+        public override void PrintDetails()
+        {
+            Console.WriteLine("Manager No. {0}\tManager Name {1}\tManager Salary {2}\tGross Salary {3}\tNet Salary {4}", this.EmpNo, this.EmpName, this.Salary, this.GrossSalary, this.NetSalary);
+        }
+    }
+    public class MarketingExecutive : Employee, IPrintable
+    {
+        public double Kilometer { get; set; }
+        public double TourAllowances { get; set; }
+        public double TelephoneAllowance = 1000.00;
+
+        public MarketingExecutive() : base() { }
+        public MarketingExecutive(int ENo, string EName, double Sal, double km) : base(ENo, EName, Sal)
+        {
+            this.Kilometer = km;
+            this.TourAllowances = 5 * this.Kilometer;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            base.GrossSalary += TourAllowances + TelephoneAllowance;
+            base.NetSalary -= (TourAllowances + TelephoneAllowance);
+        }
+        public override void PrintDetails()
+        {
+            Console.WriteLine("MarktExec No. {0}\tMarktExec Name {1}\tMarktExec Salary {2}\tGross Salary {3}\tNet Salary {4}", this.EmpNo, this.EmpName, this.Salary, this.GrossSalary, this.NetSalary);
+        }
+    }
+    internal class EmpManagement
+    {
+        public static void Main()
+        {
+            // For Question 2
+            ArrayList arrlist = new ArrayList();
+            // For quetsion 3
+            LinkedList<Employee> ll = new LinkedList<Employee>();
+
+            arrlist.Add(new Employee(101,"Akshat",20000));
+
+            arrlist.Add(new Employee(102, "Bhavesh", 30000));
+
+            arrlist.Add(new Employee(103, "Chirag", 40000));
+
+            //List<Employee> emp = new List<Employee>();
+            int choice, num;
+            double Sal, km;
+            string st, name;
+            do
+            {
+                Console.WriteLine("Enter 1 For Basic Employee\n2 for Manager\n3 for Marketing Executive\n4 to Search By Name\nPress other key to exit");
+                choice = Convert.ToInt32(Console.ReadLine());
+
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("Enter Employee Number: ");
+                        num = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Name of Employee : ");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Enter Salary of Employee : ");
+                        Sal = Convert.ToDouble(Console.ReadLine());
+                        Employee e = new Employee(num, name, Sal);
+                        arrlist.Add(e);
+                        ll.AddLast(e);
+                        //emp.Add(e);
+                        e.CalculateSalary();
+                        break;
+                    case 2:
+                        Console.WriteLine("Enter Employee Number: ");
+                        num = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Name of Employee : ");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Enter Salary of Employee : ");
+                        Sal = Convert.ToDouble(Console.ReadLine());
+                        Manager m = new Manager(num, name, Sal);
+                        arrlist.Add(m);
+                        ll.AddLast(m);
+                        //emp.Add(m);
+                        m.CalculateSalary();
+                        break;
+                    case 3:
+                        Console.WriteLine("Enter Employee Number: ");
+                        num = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Name of Employee : ");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Enter Salary of Employee : ");
+                        Sal = Convert.ToDouble(Console.ReadLine());
+
+                        Console.WriteLine("Enter Kilometers Travelled: ");
+                        km = Convert.ToDouble(Console.ReadLine());
+                        MarketingExecutive mk = new MarketingExecutive(num, name, Sal, km);
+                        arrlist.Add(mk);
+                        ll.AddLast(mk);
+                        //emp.Add(mk);
+                        mk.CalculateSalary();
+                        break;
+                    case 4:
+                        Console.WriteLine("Enter name to search: ");
+                        string Naam = Console.ReadLine();
+                        foreach (Employee p in arrlist)
+                        {
+                            if (p.EmpName.ToLower() == Naam.ToLower()) p.PrintDetails();
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("--Enter Valid Choice--");
+                        break;
+                }
+                Console.WriteLine("Do you want to continue Y/N");
+                st = (Console.ReadLine()).ToUpper();
+            } while (st == "Y");
+            Console.WriteLine("\nPrint from ArrayList of size: {0}",arrlist.Count);
+            foreach (Employee obj in arrlist)
+            {
+                obj.PrintDetails();
+            }
+            Console.WriteLine("\nPrint from LinkedList of size: {0}",ll.Count);
+            foreach (Employee ee in ll)
+            {
+                ee.PrintDetails();
+            }
+
+            
+        }
+    }
+
+}
